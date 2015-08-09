@@ -1,0 +1,4 @@
+cron:
+- description: test for statistics of performance
+  url: /test/cron
+  schedule: every 1 hours

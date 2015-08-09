@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+
+{% block head_scripts %}
+{# nothing #}
+{% endblock %}
+
+
+{% block content %}
+
+{% if not user %}
+  <a>Please login with your google account.</a> &nbsp;&nbsp;&nbsp; <a href="/user/login">Login</a>
+{% else %}
+  <a>Hello, <b>{{ user.nickname() }}</b> !!</a> &nbsp;&nbsp;&nbsp; <a href="/user/logout">Logout</a>
+  
+  <hr>
+  
+  <form method="post" action="/url/register">
+  	<label for="url">URL: </label><input id="url" type="text" />
+  	<button type="submit">등록</button>
+  </form>
+  
+  <hr>
+  
+  <table style="border: 1px solid #aaa;">
+  	<tr>
+  	  <th>TAG</th>
+  	  <th>URL</th>
+  	  <th>DEL</th>
+  	</tr>
+  {% for url in urls %}
+  	<tr>
+  	  <td>{{ url.tag }}</td>
+  	  <td>{{ url.url }}</td>
+  	  <td>
+  	  	<form method="post" action="/url/unregister">
+  	  		<input type="hidden" name="tag" value="{{ url.tag }}" />
+  	  		<button type="submit">DEL</button>
+  	  	</form>
+  	  </td>
+  	</tr>
+  {% else %}
+    <tr><td colspan="3">No URLs.</td></tr>
+  {% endfor %}
+  <table>
+{% endif %}
+
+{% endblock %}
+
+
+{% block body_scripts %}
+{# nothing #}
+{% endblock %}

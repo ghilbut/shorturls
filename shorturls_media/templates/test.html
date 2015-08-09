@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+
+{% block head_scripts %}
+{# nothing #}
+{% endblock %}
+
+
+{% block content %}
+
+{% if not user %}
+  <a>Please login with your google account.</a> &nbsp;&nbsp;&nbsp; <a href="/user/login">Login</a>
+{% else %}
+  
+  <a href="/test/reset/data">Reset Test Data</a>
+
+  <a href="/test/start">Start Test</a>
+  
+  <hr>
+
+  <a>test_rdb_vs_ndb: </a> <a>{{ test_rdb_vs_ndb }}</a> <br>
+  <a>test_string_key_vs_integer_key: </a> <a>{{ test_string_key_vs_integer_key }}</a> <br>
+  <a>test_direct_get_vs_memcache: </a> <a>{{ test_direct_get_vs_memcache }}</a> <br>
+  
+{% endif %}
+
+{% endblock %}
+
+
+{% block body_scripts %}
+{# nothing #}
+{% endblock %}
