@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+
+{% block head_scripts %}
+{# nothing #}
+<style>
+table, th, td {
+  border: solid 1px #ccc;
+  padding: 10px;
+  margin: 10px;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<h3>등록</h3>
+
+<div style="border: solid 1px #ccc; padding: 10px; margin: 10px;">
+<form method="post" action="/user">
+  <input type="hidden" name="op" value="insert"/>
+  <label for="url">URL: </label><input id="url" type="text" name="url" />
+  <input type="hidden" name="owner" value="{{ user.email() }}"/>
+  <button type="submit">등록</button>
+</form>
+</div>
+
+<hr>
+
+{% if result %}
+<h3>결과</h3>
+
+<div style="border: solid 1px #ccc; padding: 10px; margin: 10px;">
+  [&nbsp;&nbsp; <b>{{ result.key }}</b> &nbsp;&nbsp;] &nbsp;&nbsp;&nbsp; : &nbsp;&nbsp;&nbsp; <b>{{ result.url }}</b>
+</div>
+
+<hr>
+{% endif %}
+
+<h3>목록</h3>
+
+<div style="border: solid 1px #ccc; padding: 10px; margin: 10px;">
+<table style="border: 1px solid #aaa;">
+  <tr>
+    <th>KEY</th>
+    <th>URL</th>
+    <th>USED COUNT</th>
+    <th>CREATED AT</th>
+    <th>LAST ACCESS</th>
+    <th>DEL</th>
+  </tr>
+  {% for item in urls %}
+  <tr>
+  <td>{{ item.key }}</td>
+  <td>{{ item.url }}</td>
+  <td>{{ item.used_count }}</td>
+  <td>{{ item.created_at }}</td>
+  <td>{{ item.updated_at }}</td>
+  <td>
+  	<form method="post" action="/user">
+  	  <input type="hidden" name="op" value="remove"/>
+  	  <input type="hidden" name="key" value="{{ item.key }}" />
+  	  <button type="submit">DEL</button>
+  	</form>
+  </td>
+  </tr>
+  {% else %}
+    <tr><td colspan="6">No URLs.</td></tr>
+  {% endfor %}
+</table>
+</div>
+
+{% endblock %}
+
+
+{% block body_scripts %}
+{# nothing #}
+{% endblock %}

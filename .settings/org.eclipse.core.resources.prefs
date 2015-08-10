@@ -1,8 +1,10 @@
 eclipse.preferences.version=1
 encoding//shorturls/__init__.py=utf-8
+encoding//shorturls/models.py=utf-8
 encoding//shorturls/template.py=utf-8
 encoding//shorturls/test/__init__.py=utf-8
 encoding//shorturls/test/models.py=utf-8
 encoding//shorturls/test/views.py=utf-8
 encoding//shorturls/user/__init__.py=utf-8
 encoding//shorturls/user/views.py=utf-8
+encoding//shorturls/views.py=utf-8

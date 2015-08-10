@@ -27,6 +27,14 @@
 	<audio controls>
 	  <source src="/static/translate_tts.mp3" type="audio/mp3" />
     </audio>
+    
+    <hr>
+    
+    {% if not user %}
+  	  <a>Please login with your google account.</a> &nbsp;&nbsp;&nbsp; <a href="/user/login">Login</a>
+	{% else %}
+  	  <a>Hello, <b><a href="/user">{{ user.nickname() }}</a></b> !!</a> &nbsp;&nbsp;&nbsp; <a href="/user/logout">Logout</a>
+  	{% endif %}
   </header>
   
   <hr>

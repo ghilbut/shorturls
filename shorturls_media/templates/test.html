@@ -11,18 +11,37 @@
 {% if not user %}
   <a>Please login with your google account.</a> &nbsp;&nbsp;&nbsp; <a href="/user/login">Login</a>
 {% else %}
+
+  <a>Hello, <b>{{ user.nickname() }}</b> !!</a> &nbsp;&nbsp;&nbsp; <a href="/user/logout">Logout</a>
+
+  <hr>
   
   <a href="/test/reset/data">Reset Test Data</a>
-
   <a href="/test/start">Start Test</a>
+
+{% endif %}
+
+  {% for r in results %}
   
   <hr>
-
-  <a>test_rdb_vs_ndb: </a> <a>{{ test_rdb_vs_ndb }}</a> <br>
-  <a>test_string_key_vs_integer_key: </a> <a>{{ test_string_key_vs_integer_key }}</a> <br>
-  <a>test_direct_get_vs_memcache: </a> <a>{{ test_direct_get_vs_memcache }}</a> <br>
   
-{% endif %}
+  <h3>{{ r.name }}</h3>
+  <table>
+  	<tr>
+  		<th>test_count</th><th>diff</th><th>valid</th><th>created_at</th>
+  	</tr>
+  	{% for item in r.results %}
+  	<tr>
+  		<td>{{ item.test_count }}</td><td>{{ item.diff }}</td><td>{{ item.valid }}</td><td>{{ item.created_at }}</td>
+  	</tr>
+  	{% else %}
+  	<tr>
+  		<td colspan="4">No Results.</td>
+  	</tr>
+  	{% endfor %}
+  </table>
+  
+  {% endfor %}
 
 {% endblock %}
 

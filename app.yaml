@@ -22,13 +22,6 @@ builtins:
 
 handlers:
 
-- url: /debug/.*
-  script: google.appengine.ext.admin.application
-  login: admin
-- url: /debug
-  script: google.appengine.ext.admin.application
-  login: admin
-
 - url: /favicon\.ico
   static_files: favicon.ico
   upload: favicon\.ico
@@ -36,19 +29,31 @@ handlers:
 - url: /static
   static_dir: shorturls_media/static
 
+- url: /debug/.*
+  script: google.appengine.ext.admin.application
+  login: admin
+- url: /debug
+  script: google.appengine.ext.admin.application
+  login: admin
+
 - url: /test/cron
   script: shorturls.test.views.app
   login: admin
-- url: /test
-  script: shorturls.test.views.app
 - url: /test/.*
+  script: shorturls.test.views.app
+- url: /test
   script: shorturls.test.views.app
 
 - url: /user/.*
   script: shorturls.user.views.app
+- url: /user
+  script: shorturls.user.views.app
+
+- url: /[a-zA-Z0-9]{6}
+  script: shorturls.views.app
 
 - url: /.*
-  script: shorturls.app
+  script: shorturls.views.app
 
 
 env_variables:

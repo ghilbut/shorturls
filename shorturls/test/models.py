@@ -123,11 +123,11 @@ class TestUnusedKeySet(ndb.Model):
 
 # test history
 class TestResult(ndb.Model):
-  type = ndb.StringProperty()
+  type = ndb.StringProperty(indexed=True)
   test_count = ndb.IntegerProperty()
   diff = ndb.StringProperty()
   valid = ndb.BooleanProperty()
-  created_at = ndb.DateTimeProperty(auto_now_add=True)
+  created_at = ndb.DateTimeProperty(auto_now_add=True, indexed=True)
   
   @staticmethod
   def all():

@@ -170,10 +170,19 @@ class Test(webapp2.RequestHandler):
     if user:
       template_values['user'] = user
 
-      template = get_template('test.html')
-      self.response.write(template.render(template_values))
-    else:
-      self.redirect(users.create_login_url('/test'))
+    #r0 = TestResult.query(TestResult.type=='test_rdb_vs_ndb').order(-TestResult.created_at).fetch()
+    #template_values['r0'] = { 'name': 'test_rdb_vs_ndb', 'results': r0 }
+    r1 = TestResult.query(TestResult.type=='test_string_key_vs_integer_key').order(-TestResult.created_at).fetch()
+    r2 = TestResult.query(TestResult.type=='test_direct_get_vs_memcache').order(-TestResult.created_at).fetch()
+
+    template_values['results'] = [
+        { 'name': 'test_string_key_vs_integer_key', 'results': r1 },
+        { 'name': 'test_direct_get_vs_memcache', 'results': r2 }
+      ]
+    
+    template = get_template('test.html')
+    self.response.write(template.render(template_values))
+    
 
 
 
@@ -222,12 +231,13 @@ class TestStart(webapp2.RequestHandler):
       template_values['user'] = user
       
       kTotalTestCount = 1000
-      template_values['test_rdb_vs_ndb'] = test_rdb_vs_ndb(kTotalTestCount)
+      #template_values['test_rdb_vs_ndb'] = test_rdb_vs_ndb(kTotalTestCount)
       template_values['test_string_key_vs_integer_key'] = test_string_key_vs_integer_key(kTotalTestCount)
       template_values['test_direct_get_vs_memcache'] = test_direct_get_vs_memcache(kTotalTestCount)
 
-      template = get_template('test.html')
-      self.response.write(template.render(template_values))
+      #template = get_template('test.html')
+      #self.response.write(template.render(template_values))
+      self.redirect('/test')
     else:
       self.redirect(users.create_login_url('/test'))
 
@@ -236,7 +246,7 @@ class TestStart(webapp2.RequestHandler):
 class TestCron(webapp2.RequestHandler):
   def get(self):
     kTotalTestCount = 10000
-    test_rdb_vs_ndb(kTotalTestCount)
+    #test_rdb_vs_ndb(kTotalTestCount)
     test_string_key_vs_integer_key(kTotalTestCount)
     test_direct_get_vs_memcache(kTotalTestCount)
     self.response.headers.add('X-Appengine-Cron', 'true')
