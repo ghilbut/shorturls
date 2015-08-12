@@ -32,7 +32,7 @@ table, th, td {
 <h3>결과</h3>
 
 <div style="border: solid 1px #ccc; padding: 10px; margin: 10px;">
-  [&nbsp;&nbsp; <b>{{ result.key }}</b> &nbsp;&nbsp;] &nbsp;&nbsp;&nbsp; : &nbsp;&nbsp;&nbsp; <b>{{ result.url }}</b>
+  [&nbsp;&nbsp; <b>{{ result.tag }}</b> &nbsp;&nbsp;] &nbsp;&nbsp;&nbsp; : &nbsp;&nbsp;&nbsp; <b>{{ result.url }}</b>
 </div>
 
 <hr>
@@ -40,27 +40,25 @@ table, th, td {
 
 <h3>목록</h3>
 
-<div style="border: solid 1px #ccc; padding: 10px; margin: 10px;">
-<table style="border: 1px solid #aaa;">
+<table style="border: 1px solid #ccc; padding: 10px; margin: 10px;">
   <tr>
-    <th>KEY</th>
+    <th>TAG</th>
     <th>URL</th>
-    <th>USED COUNT</th>
     <th>CREATED AT</th>
-    <th>LAST ACCESS</th>
     <th>DEL</th>
   </tr>
   {% for item in urls %}
   <tr>
-  <td>{{ item.key }}</td>
+  <td>
+  	<a target="_blank" href="/{{ item.tag }}">{{ item.tag }}</a>&nbsp;&nbsp;&nbsp;
+  	<a href="/user/tag/info?tag={{ item.tag }}">[detail]</a>
+  </td>
   <td>{{ item.url }}</td>
-  <td>{{ item.used_count }}</td>
   <td>{{ item.created_at }}</td>
-  <td>{{ item.updated_at }}</td>
   <td>
   	<form method="post" action="/user">
   	  <input type="hidden" name="op" value="remove"/>
-  	  <input type="hidden" name="key" value="{{ item.key }}" />
+  	  <input type="hidden" name="tag" value="{{ item.tag }}" />
   	  <button type="submit">DEL</button>
   	</form>
   </td>
@@ -69,7 +67,6 @@ table, th, td {
     <tr><td colspan="6">No URLs.</td></tr>
   {% endfor %}
 </table>
-</div>
 
 {% endblock %}
 

@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+
+{% block head_scripts %}
+{# nothing #}
+<style>
+table, th, td {
+  border: solid 1px #ccc;
+  padding: 10px;
+  margin: 10px;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<h3>TAG 정보</h3>
+
+<ul>
+	<li>TAG: <a target="_blank" href="/{{ tag.tag }}">{{ tag.tag }}</a></li>
+	<li>URL: {{ tag.url }}</li>
+	<li>CREATED: {{ tag.created_at }}</li>
+	<li><button id="flush_memcache">clear cache</button></li>
+</ul>
+
+<hr>
+
+<h3>기록</h3>
+
+<table style="border: 1px solid #ccc; padding: 10px; margin: 10px;">
+  <tr>
+    <th rowspan="2">TAG</th>
+    <th rowspan="2">URL</th>
+    <th rowspan="2">IS CACHED</th>
+    <th rowspan="2">EXECUTION TIME (sec)</th>
+    <th rowspan="2">ACCESS TIME</th>
+    <th colspan="4">ACCESS INFO</th>
+  </tr>
+  <tr>
+  	<th>CLIENT</th>
+    <th>HEADERS</th>
+    <th>COOKIES</th>
+  </tr>
+  {% for item in items %}
+  <tr>
+  <td>{{ item.tag }}</td>
+  <td>{{ item.url }}</td>
+  <td>{{ item.is_cached }}</td>
+  <td>{{ item.execution_time_sec }}</td>
+  <td>{{ item.created_at }}</td>
+  <td>{{ item.access_info.client }}</td>
+  <td>
+  	<button class="show">show</button>
+  	<button class="hide" style="display:none;">hide</button>
+  	<ul style="display:none;">
+    {% for key, value in item.access_info.headers.items() %}
+      <li><b>[ {{ key }} ]</b> : {{ value }}</li>
+    {% endfor %}
+    </ul>
+  </td>
+  <td>
+  	<button class="show">show</button>
+  	<button class="hide" style="display:none;">hide</button>
+  	<ul style="display:none;">
+    {% for key, value in item.access_info.cookies.items() %}
+      <li><b>[ {{ key }} ]</b> : {{ value }}</li>
+    {% endfor %}
+    </ul>
+  </td>
+  </tr>
+  {% else %}
+  <tr><td colspan="8">No Histories.</td></tr>
+  {% endfor %}
+</table>
+
+{% endblock %}
+
+
+{% block body_scripts %}
+<script>
+var shows = document.getElementsByClassName('show');
+for (var i = 0, size = shows.length; i < size; ++i) {
+  var show = shows[i];
+  show.onclick = function () {
+    hide = this.parentNode.getElementsByClassName('hide')[0];
+    hide.style.display = 'inline';
+    ul = this.parentNode.getElementsByTagName('UL')[0];
+    ul.style.display = '';
+    this.style.display = 'none';
+  };
+}
+
+var hides = document.getElementsByClassName('hide');
+for (var i = 0, size = hides.length; i < size; ++i) {
+  var hide = hides[i];
+  hide.onclick = function () {
+    show = this.parentNode.getElementsByClassName('show')[0];
+    show.style.display = '';
+    ul = this.parentNode.getElementsByTagName('UL')[0];
+    ul.style.display = 'none';
+    this.style.display = 'none';
+  };
+}
+
+document.getElementById('flush_memcache').onclick = function () {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', '/user/flush/memcache?tag={{ tag.tag }}', false);
+  xhr.send();
+};
+</script>
+{% endblock %}

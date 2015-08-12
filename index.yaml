@@ -10,6 +10,18 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
+- kind: AccessHistory
+  properties:
+  - name: tag
+  - name: created_at
+    direction: desc
+
+- kind: Account
+  properties:
+  - name: email
+  - name: created_at
+    direction: desc
+
 - kind: TestResult
   properties:
   - name: type

@@ -1,5 +1,6 @@
 #-*- coding: utf-8 -*-
 
+from datetime import datetime
 from google.appengine.api import memcache
 from google.appengine.api import users
 from shorturls.models import RedirectTable, AccessHistory
@@ -24,32 +25,51 @@ class Index(webapp2.RequestHandler):
 
 
 class Redirect(webapp2.RequestHandler):
-  def get(self):
-
-    key = self.request.path[1:]
-    
+  
+  @staticmethod
+  def get_url(tag):
     # get from memcache first
-    url = memcache.get(key)
-    
+    is_cached = False
+    url = memcache.get(tag)
     if url == None:
       # get from RedirectTable
-      item = RedirectTable.get(key)
-      
+      item = RedirectTable.get(tag)
       if item != None:
         url = item.url
-      
-        # max memcache value length is 250  
-        if len(url) <= 250:
-          memcache.add(key, url)
+        # max memcache key size is 250-bytes
+        # max memcache value size is 250-Mbytes - key size
+        memcache.add(tag, url)
+    else:
+      is_cached = True
+    return url, is_cached
+
+  def get(self):
     
+    # check processing time
+    now = datetime.now()
+    tag = self.request.path[1:]
+    url, is_cached = self.get_url(tag)
+
     if url == None:
       self.abort(404)
 
     ## get access information
-    access_info = {}
+    headers = {}
+    for key in self.request.headers.keys():
+      headers[key] = self.request.headers[key]
+    cookies = {}
+    for key in self.request.cookies.keys():
+      cookies[key] = self.request.cookies[key]
 
-    RedirectTable.increase_used_count(key)
-    AccessHistory.record(key, url, access_info)
+    access_info = {
+        'client': self.request.remote_addr,
+        'headers': headers,
+        'cookies': cookies
+      }
+
+    record = AccessHistory.record(tag, url, access_info, is_cached)
+    record.execution_time_sec = (datetime.now() - now).total_seconds()
+    record.put()
     return self.redirect(str(url), permanent=True)
 
 
