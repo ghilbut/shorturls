@@ -4,10 +4,8 @@
 {% block head_scripts %}
 {# nothing #}
 <style>
-table, th, td {
-  border: solid 1px #ccc;
-  padding: 10px;
-  margin: 10px;
+.hide_info {
+  display: none;
 }
 </style>
 {% endblock %}
@@ -15,22 +13,27 @@ table, th, td {
 
 {% block content %}
 
+<div style="margin-top: 3em;"></div>
+
 <h3>TAG 정보</h3>
 
-<ul>
-	<li>TAG: <a target="_blank" href="/{{ tag.tag }}">{{ tag.tag }}</a></li>
-	<li>URL: {{ tag.url }}</li>
-	<li>CREATED: {{ tag.created_at }}</li>
-	<li><button id="flush_memcache">clear cache</button></li>
-</ul>
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">{{ tag.tag }}</div>
+  <div class="panel-body">
+    <ul>
+	  <li>URL: {{ tag.url }}</li>
+	  <li>CREATED: {{ tag.created_at }}</li>
+	  <li>
+	  	<a class="btn btn-primary btn-xs" role="button" target="_blank" href="/{{ tag.tag }}">Test</a>
+	  	<a class="btn btn-primary btn-xs" role="button" id="flush_memcache">Clear Cache</a>
+	  </li>
+	</ul>
+  </div>
 
-<hr>
-
-<h3>기록</h3>
-
-<table style="border: 1px solid #ccc; padding: 10px; margin: 10px;">
-  <tr>
-    <th rowspan="2">TAG</th>
+  <!-- Table -->
+  <table class="table">
+    <tr>
     <th rowspan="2">URL</th>
     <th rowspan="2">IS CACHED</th>
     <th rowspan="2">EXECUTION TIME (sec)</th>
@@ -44,25 +47,34 @@ table, th, td {
   </tr>
   {% for item in items %}
   <tr>
-  <td>{{ item.tag }}</td>
   <td>{{ item.url }}</td>
   <td>{{ item.is_cached }}</td>
   <td>{{ item.execution_time_sec }}</td>
   <td>{{ item.created_at }}</td>
   <td>{{ item.access_info.client }}</td>
   <td>
-  	<button class="show">show</button>
-  	<button class="hide" style="display:none;">hide</button>
+  	<button type="button" class="btn btn-default btn-xs show_info">
+	  <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span> Show
+	</button>
   	<ul style="display:none;">
+  	  <button type="button" class="btn btn-default btn-xs hide_info">
+		<span class="glyphicon glyphicon-menu-up" aria-hidden="true"></span> Hide
+      </button>
+      <br><br>
     {% for key, value in item.access_info.headers.items() %}
       <li><b>[ {{ key }} ]</b> : {{ value }}</li>
     {% endfor %}
     </ul>
   </td>
   <td>
-  	<button class="show">show</button>
-  	<button class="hide" style="display:none;">hide</button>
+  	<button type="button" class="btn btn-default btn-xs show_info">
+	  <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span> Show
+	</button>
   	<ul style="display:none;">
+  	<button type="button" class="btn btn-default btn-xs hide_info">
+	  <span class="glyphicon glyphicon-menu-up" aria-hidden="true"></span> Hide
+    </button>
+    <br><br>
     {% for key, value in item.access_info.cookies.items() %}
       <li><b>[ {{ key }} ]</b> : {{ value }}</li>
     {% endfor %}
@@ -72,18 +84,21 @@ table, th, td {
   {% else %}
   <tr><td colspan="8">No Histories.</td></tr>
   {% endfor %}
-</table>
+  </table>
+</div>
+
+<div style="margin-bottom: 3em;"></div>
 
 {% endblock %}
 
 
 {% block body_scripts %}
 <script>
-var shows = document.getElementsByClassName('show');
+var shows = document.getElementsByClassName('show_info');
 for (var i = 0, size = shows.length; i < size; ++i) {
   var show = shows[i];
   show.onclick = function () {
-    hide = this.parentNode.getElementsByClassName('hide')[0];
+    hide = this.parentNode.getElementsByClassName('hide_info')[0];
     hide.style.display = 'inline';
     ul = this.parentNode.getElementsByTagName('UL')[0];
     ul.style.display = '';
@@ -91,13 +106,13 @@ for (var i = 0, size = shows.length; i < size; ++i) {
   };
 }
 
-var hides = document.getElementsByClassName('hide');
+var hides = document.getElementsByClassName('hide_info');
 for (var i = 0, size = hides.length; i < size; ++i) {
   var hide = hides[i];
   hide.onclick = function () {
-    show = this.parentNode.getElementsByClassName('show')[0];
+    show = this.parentNode.parentNode.getElementsByClassName('show_info')[0];
     show.style.display = '';
-    ul = this.parentNode.getElementsByTagName('UL')[0];
+    ul = this.parentNode;
     ul.style.display = 'none';
     this.style.display = 'none';
   };

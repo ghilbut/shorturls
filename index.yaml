@@ -22,6 +22,14 @@ indexes:
   - name: created_at
     direction: desc
 
+- kind: RedirectTable
+  ancestor: yes
+  properties:
+  - name: deleted_at
+  - name: owner
+  - name: created_at
+    direction: desc
+
 - kind: TestResult
   properties:
   - name: type

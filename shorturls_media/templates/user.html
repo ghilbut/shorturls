@@ -3,45 +3,44 @@
 
 {% block head_scripts %}
 {# nothing #}
-<style>
-table, th, td {
-  border: solid 1px #ccc;
-  padding: 10px;
-  margin: 10px;
-}
-</style>
 {% endblock %}
 
 
 {% block content %}
 
-<h3>등록</h3>
+<div style="margin-top: 3em;"></div>
 
-<div style="border: solid 1px #ccc; padding: 10px; margin: 10px;">
-<form method="post" action="/user">
-  <input type="hidden" name="op" value="insert"/>
-  <label for="url">URL: </label><input id="url" type="text" name="url" />
-  <input type="hidden" name="owner" value="{{ user.email() }}"/>
-  <button type="submit">등록</button>
-</form>
+<div class="well well-lg">
+	
+  <form method="post" action="/user">
+    <input type="hidden" name="op" value="insert"/>
+    <input type="hidden" name="owner" value="{{ user.email() }}"/>
+	
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="input-group">
+          <label class="input-group-addon" for="url">URL</label>
+          <input type="text" class="form-control" id="url" name="url" placeholder="Redirect for ...">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="submit">Register</button>
+          </span>
+        </div><!-- /input-group -->
+      </div><!-- /.col-lg-6 -->
+    </div><!-- /.row -->
+  
+  </form>
+
 </div>
 
-<hr>
+<div style="margin-top: 3em;"></div>
 
-{% if result %}
-<h3>결과</h3>
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Panel heading</div>
 
-<div style="border: solid 1px #ccc; padding: 10px; margin: 10px;">
-  [&nbsp;&nbsp; <b>{{ result.tag }}</b> &nbsp;&nbsp;] &nbsp;&nbsp;&nbsp; : &nbsp;&nbsp;&nbsp; <b>{{ result.url }}</b>
-</div>
-
-<hr>
-{% endif %}
-
-<h3>목록</h3>
-
-<table style="border: 1px solid #ccc; padding: 10px; margin: 10px;">
-  <tr>
+  <!-- Table -->
+  <table class="table">
+    <tr>
     <th>TAG</th>
     <th>URL</th>
     <th>CREATED AT</th>
@@ -50,23 +49,30 @@ table, th, td {
   {% for item in urls %}
   <tr>
   <td>
-  	<a target="_blank" href="/{{ item.tag }}">{{ item.tag }}</a>&nbsp;&nbsp;&nbsp;
-  	<a href="/user/tag/info?tag={{ item.tag }}">[detail]</a>
+  	<a href="/user/tag/info?tag={{ item.tag }}">{{ item.tag }}</a>
   </td>
-  <td>{{ item.url }}</td>
+  <td>
+  	<a class="btn btn-primary btn-xs" target="_blank" href="/{{ item.tag }}" role="button">Test</a>
+  	&nbsp; {{ item.url }}
+  </td>
   <td>{{ item.created_at }}</td>
   <td>
   	<form method="post" action="/user">
   	  <input type="hidden" name="op" value="remove"/>
   	  <input type="hidden" name="tag" value="{{ item.tag }}" />
-  	  <button type="submit">DEL</button>
+  	  <button type="submit" class="btn btn-default btn-xs" id="how_to_read_play">
+		<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete
+	  </button>
   	</form>
   </td>
   </tr>
   {% else %}
     <tr><td colspan="6">No URLs.</td></tr>
   {% endfor %}
-</table>
+  </table>
+</div>
+
+<div style="margin-bottom: 3em;"></div>
 
 {% endblock %}
 

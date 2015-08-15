@@ -1,54 +1,101 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="format-detection" content="telephone=no" />
   <meta name="language" content="ko" />
   <meta name="author" content="김준형 (Kim , Jun-hyung)" />
   <meta name="copyright" content="김준형 (Kim , Jun-hyung)" />
   <meta name="reply-to" content="ghilbut@gmail.com" />
-
   <link rel="shortcut icon" href="/static/images/favicon.ico" />
+  
+  <title>shorturls | 김준형</title>
+  
+  <!-- design from http://getbootstrap.com/examples/jumbotron-narrow/ -->
+  
+  <!-- jquery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+  
+  <!-- bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  
+  <!-- Custom styles for this template -->
+  <link href="/static/bootstrap/jumbotron-narrow.css" rel="stylesheet">
+
+  <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+  <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+  <script src="/static/bootstrap/ie-emulation-modes-warning.js"></script>
+  
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
   <link rel="stylesheet" href="/static/css/common.css"  media="screen" />
 
 {% block head_scripts %}
 {% endblock %}
 
-  <title>shorturls | 김준형</title>
 </head>
 <body>
 
-<div id="wrap">
-	
-  <header>
-    <h1> SHORTURLS </h1>
 
-	<audio controls>
-	  <source src="/static/translate_tts.mp3" type="audio/mp3" />
-    </audio>
-    
-    <hr>
-    
-    {% if not user %}
-  	  <a>Please login with your google account.</a> &nbsp;&nbsp;&nbsp; <a href="/user/login">Login</a>
-	{% else %}
-  	  <a>Hello, <b><a href="/user">{{ user.nickname() }}</a></b> !!</a> &nbsp;&nbsp;&nbsp; <a href="/user/logout">Logout</a>
-  	{% endif %}
-  </header>
-  
-  <hr>
+
+<div class="container">
+  <div class="header clearfix">
+    <nav>
+      <ul class="nav nav-pills pull-right">
+      	{% if user %}
+      	<li role="presentation"><a href="/user">{{ user.nickname() }}</a></li>
+      	<li role="presentation" class="active"><a href="/user/logout">Logout</a></li>
+      	{% else %}
+        <li role="presentation" class="active"><a href="/user/login">Login</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+
+    <h3 class="text-muted">
+    	<a href="/">SHORTURLS</a> &nbsp;
+    	<audio id="how_to_read">
+          <source src="/static/translate_tts.mp3" type="audio/mp3" />
+        </audio>
+		<button type="button" class="btn btn-default btn-xs" id="how_to_read_play">
+		  <span class="glyphicon glyphicon-play" aria-hidden="true"></span> How to read
+		</button>
+    </h3>
+  </div>
 
 {% block content %}
 {% endblock %}
 
-</div>
+  <footer class="footer">
+    <p>&copy; 2015</p>
+  </footer>
+
+</div> <!-- /container -->
+
+
 
 <script type="application/javascript">
+var audio = document.getElementById('how_to_read');
+document.getElementById('how_to_read_play').onclick = function () {
+  audio.play();
+};
 </script>
 
 {% block body_scripts %}
 {% endblock %}
 
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <script src="/static/bootstrap/ie10-viewport-bug-workaround.js"></script>
 </body>
 </html>

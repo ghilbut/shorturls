@@ -107,7 +107,10 @@ class RedirectTable(ndb.Model):
   @staticmethod
   def get_by_owner(owner):
     account = Account.get_or_create(owner)
-    items = RedirectTable.query(ancestor=account).filter(RedirectTable.owner==owner, RedirectTable.deleted_at==None).fetch()
+    qry = RedirectTable.query(ancestor=account)
+    qry = qry.filter(RedirectTable.owner==owner, RedirectTable.deleted_at==None)
+    qry = qry.order(-RedirectTable.created_at)
+    items = qry.fetch()
     return items
 
   @staticmethod
