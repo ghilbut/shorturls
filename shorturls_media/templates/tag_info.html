@@ -34,7 +34,6 @@
   <!-- Table -->
   <table class="table">
     <tr>
-    <th rowspan="2">URL</th>
     <th rowspan="2">IS CACHED</th>
     <th rowspan="2">EXECUTION TIME (sec)</th>
     <th rowspan="2">ACCESS TIME</th>
@@ -47,7 +46,6 @@
   </tr>
   {% for item in items %}
   <tr>
-  <td>{{ item.url }}</td>
   <td>{{ item.is_cached }}</td>
   <td>{{ item.execution_time_sec }}</td>
   <td>{{ item.created_at }}</td>
@@ -82,7 +80,7 @@
   </td>
   </tr>
   {% else %}
-  <tr><td colspan="8">No Histories.</td></tr>
+  <tr><td colspan="6">No Histories.</td></tr>
   {% endfor %}
   </table>
 </div>

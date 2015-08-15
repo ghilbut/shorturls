@@ -15,19 +15,15 @@
   <form method="post" action="/user">
     <input type="hidden" name="op" value="insert"/>
     <input type="hidden" name="owner" value="{{ user.email() }}"/>
-	
-    <div class="row">
-      <div class="col-lg-6">
-        <div class="input-group">
-          <label class="input-group-addon" for="url">URL</label>
-          <input type="text" class="form-control" id="url" name="url" placeholder="Redirect for ...">
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="submit">Register</button>
-          </span>
-        </div><!-- /input-group -->
-      </div><!-- /.col-lg-6 -->
-    </div><!-- /.row -->
-  
+
+    <div class="input-group">
+      <label class="input-group-addon" for="url">URL</label>
+      <input type="text" class="form-control" id="url" name="url" placeholder="Redirect for ...">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="submit">Register</button>
+      </span>
+    </div><!-- /input-group -->
+
   </form>
 
 </div>
